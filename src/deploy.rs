@@ -25,7 +25,7 @@ struct ActivateCommandData<'a> {
 }
 
 fn build_activate_command(data: ActivateCommandData) -> String {
-    let mut self_activate_command = format!("systemd-run --user --no-block {}/activate-rs", data.closure);
+    let mut self_activate_command = format!("systemd-run --user --no-block -E PATH=$PATH {}/activate-rs", data.closure);
 
     if data.debug_logs {
         self_activate_command = format!("{} --debug-logs", self_activate_command);
@@ -90,7 +90,7 @@ fn test_activation_command_builder() {
             log_dir,
             dry_activate
         }),
-        "sudo -u test systemd-run --user --no-block /nix/store/blah/etc/activate-rs --debug-logs --log-dir /tmp/something.txt activate '/nix/store/blah/etc' '/blah/profiles/test' --temp-path '/tmp' --confirm-timeout 30 --magic-rollback --auto-rollback"
+        "sudo -u test systemd-run --user --no-block -E PATH=$PATH /nix/store/blah/etc/activate-rs --debug-logs --log-dir /tmp/something.txt activate '/nix/store/blah/etc' '/blah/profiles/test' --temp-path '/tmp' --confirm-timeout 30 --magic-rollback --auto-rollback"
             .to_string(),
     );
 }
